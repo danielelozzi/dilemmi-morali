@@ -14,32 +14,62 @@ Lo script combina le informazioni rilevanti da entrambi i file, calcola le metri
 
 ## 2. Prerequisiti
 
-Prima di utilizzare lo script, assicurati di avere un ambiente Python funzionante. Hai due opzioni principali:
+Prima di utilizzare lo script, assicurati di avere un ambiente Python funzionante. Per garantire che le dipendenze del progetto non entrino in conflitto con altri progetti Python sul tuo computer, è fortemente consigliato utilizzare un **ambiente virtuale**.
 
-### Opzione A: Installazione Standard (Python + pip)
+Di seguito trovi due opzioni principali per configurare l'ambiente.
 
-Questa è l'opzione più leggera se hai già familiarità con Python.
+### Opzione A: Installazione con Python e `venv` (Standard)
 
-*   **Python 3**: Lo script è scritto in Python 3. Assicurati di averlo installato dal sito ufficiale di Python.
-*   **Libreria `pandas`**: Lo script dipende da `pandas` per la manipolazione dei dati. Se non l'hai installata, apri il terminale (o il prompt dei comandi) e digita:
+Questa è l'opzione più leggera se hai già Python installato sul tuo sistema.
+
+1.  **Installa Python**: Assicurati di avere Python 3 installato. Puoi scaricarlo dal sito ufficiale di Python.
+
+2.  **Crea un ambiente virtuale**: Apri il terminale, naviga nella cartella del progetto (`progetto_analisi/`) e crea un ambiente virtuale.
     ```bash
-    pip install pandas
+    python -m venv venv
     ```
 
-### Opzione B: Installazione con Anaconda (Consigliato per la ricerca)
+3.  **Attiva l'ambiente virtuale**:
+    *   Su **macOS/Linux**:
+        ```bash
+        source venv/bin/activate
+        ```
+    *   Su **Windows**:
+        ```bash
+        venv\Scripts\activate
+        ```
+    Noterai che il nome dell'ambiente (`venv`) appare all'inizio della riga del terminale.
 
-Anaconda è una distribuzione gratuita di Python, pensata specificamente per il calcolo scientifico e l'analisi dei dati. Include Python, `pandas` e centinaia di altre librerie utili, semplificando la gestione dell'ambiente di lavoro.
-
-1.  **Scarica Anaconda**: Vai alla pagina di download di Anaconda e scarica l'installer per il tuo sistema operativo (Windows, macOS o Linux).
-2.  **Installa Anaconda**: Esegui il file scaricato e segui le istruzioni a schermo. L'installazione standard è solitamente sufficiente.
-3.  **Verifica `pandas`**: Una volta installato, apri l'**Anaconda Prompt** (su Windows) o il terminale (su macOS/Linux). `pandas` dovrebbe essere già incluso. Per sicurezza, puoi eseguire il seguente comando per installarlo o aggiornarlo:
+4.  **Installa le dipendenze**: Con l'ambiente attivo, installa le librerie necessarie usando il file `requirements.txt` fornito.
     ```bash
+    pip install -r requirements.txt
+    ```
+
+### Opzione B: Installazione con Anaconda/Miniconda (Consigliato per la ricerca)
+
+Anaconda è una distribuzione pensata per il calcolo scientifico. Semplifica la gestione di pacchetti e ambienti.
+
+1.  **Installa Anaconda o Miniconda**: Scarica l'installer per il tuo sistema operativo dalla pagina di Anaconda (versione completa) o Miniconda (versione minimale, più leggera).
+
+2.  **Crea un ambiente Conda**: Apri l'**Anaconda Prompt** (su Windows) o il terminale (macOS/Linux) e crea un nuovo ambiente. Puoi chiamarlo `dilemmi_env` o come preferisci.
+    ```bash
+    conda create --name dilemmi_env python=3.9
+    ```
+    Ti verrà chiesto di confermare, digita `y` e premi Invio.
+
+3.  **Attiva l'ambiente**:
+    ```bash
+    conda activate dilemmi_env
+    ```
+
+4.  **Installa le dipendenze**: Con l'ambiente attivo, puoi installare `pandas` tramite conda o pip.
+    ```bash
+    # Opzione 1: Usando conda (consigliato in un ambiente conda)
     conda install pandas
+
+    # Opzione 2: Usando pip e il file requirements.txt
+    pip install -r requirements.txt
     ```
-
----
-
-**Indipendentemente dall'opzione scelta**, devi avere a disposizione i file di output di SPEED e PsychoPy per ogni partecipante.
 
 ## 3. Struttura delle Cartelle (Fondamentale)
 
@@ -117,4 +147,3 @@ Questo formato "pulito" è ideale per essere importato in software statistici co
 * `reaction_time_custom_s`: Il tempo di reazione calcolato.
 
 senza quelle relative alle features estratte dall'eyetracker.
-
