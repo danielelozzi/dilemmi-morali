@@ -202,6 +202,7 @@ def process_participant_data(participant_folder):
     participant_id_folder = os.path.basename(participant_folder)
     output_filename = os.path.join(participant_folder, f"{participant_id_folder}_processed_data.csv")
     final_df.to_csv(output_filename, index=False, float_format='%.4f')
+    final_df.to_excel(output_filename)
     
     return output_filename
 
