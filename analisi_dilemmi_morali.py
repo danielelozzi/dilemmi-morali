@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import re
+import openpyxl
 
 def process_participant_data(participant_folder):
     """
