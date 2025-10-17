@@ -1,6 +1,6 @@
 # Guida all'Uso dello Script di Analisi per Esperimenti di Dilemmi
 
-Questo documento descrive come utilizzare lo script Python `campus_analysis_dilemmi_speed_psychopy.py` per processare e combinare i dati provenienti da esperimenti realizzati con PsychoPy e analizzati con SPEED.
+Questo documento descrive come utilizzare lo script Python `analisi_dilemmi_morali.py` per processare e combinare i dati provenienti da esperimenti realizzati con PsychoPy e analizzati con SPEED.
 
 ## 1. Scopo dello Script
 
@@ -26,14 +26,14 @@ conda create --name dilemmi
 conda activate dilemmi
 conda install pip
 conda install git
-git clone https://github.com/danielelozzi/dilemmi_campus_biomedico.git
+git clone https://github.com/danielelozzi/dilemmi-morali.git
 ```
 4. **Installa le librerie richieste**:
 
 apri la cartella
 
 ```bash
-cd dilemmi_campus_biomedico
+cd dilemmi-morali
 ```
 
 installa i requisiti
@@ -60,7 +60,7 @@ Lo script si aspetta una specifica organizzazione dei file per funzionare corret
 ```
 progetto_analisi/
 │
-├── campus_analysis_dilemmi_speed_psychopy.py  <-- LO SCRIPT DEVE ESSERE QUI
+├── analisi_dilemmi_morali.py  <-- LO SCRIPT DEVE ESSERE QUI
 │
 └── participants/                                <-- UNA CARTELLA CHIAMATA "participants"
     │
@@ -91,11 +91,11 @@ progetto_analisi/
 4.  **Naviga nella Cartella**: Usa il comando `cd` per spostarti nella cartella principale del progetto (quella che contiene lo script e la cartella `participants`).
     *Suggerimento: su molti terminali, puoi scrivere `cd ` e poi trascinare la cartella direttamente nella finestra per incollare il suo percorso.* Esempio:
    ```bash
-    cd /percorso/della/tua/cartella/progetto_analisi
+    cd /percorso/della/tua/cartella/dilemmi-morali
    ```
 5.  **Esegui lo Script**: Lancia lo script con il comando `python`:
     ```bash
-    python campus_analysis_dilemmi_speed_psychopy.py
+    python analisi_dilemmi_morali.py
     ```
 6.  **Controlla l'Output**: Lo script stamperà a schermo lo stato di avanzamento. Al termine, troverai un nuovo file chiamato `[nome_partecipante]_processed_data.csv` all'interno di ogni sottocartella in `participants`.
 
