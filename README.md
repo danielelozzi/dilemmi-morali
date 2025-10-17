@@ -58,7 +58,7 @@ pip install -r requirements.txt
 Lo script si aspetta una specifica organizzazione dei file per funzionare correttamente. Crea una cartella principale per il tuo progetto e al suo interno organizza i file come segue:
 
 ```
-progetto_analisi/
+dilemmi-morali/
 │
 ├── analisi_dilemmi_morali.py  <-- LO SCRIPT DEVE ESSERE QUI
 │
