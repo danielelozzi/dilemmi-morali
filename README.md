@@ -134,3 +134,8 @@ Questo formato "pulito" è ideale per essere importato in software statistici co
 * `reaction_time_custom_s`: Il tempo di reazione calcolato.
 
 senza quelle relative alle features estratte dall'eyetracker.
+
+## ✍️ Authors & Citation
+
+Questo strumento è stato sviluppato dal Dott. Daniele Lozzi. e dal Laboratorio di Scienze Cognitive e Comportamentali (LabSCoC)[https://labscoc.wordpress.com/chi-siamo/] dell'Università dell'Aquila
+
