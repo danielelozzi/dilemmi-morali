@@ -1,75 +1,57 @@
 # Guida all'Uso dello Script di Analisi per Esperimenti di Dilemmi
 
-Questo documento descrive come utilizzare lo script Python `analisi_dilemmi_morali.py` per processare e combinare i dati provenienti da esperimenti realizzati con PsychoPy e analizzati con SPEED. 
-Questo script può essere anche utilizzato solamente per analizzare i dati registrati con PsychoPy senza Eyetracker. 
+Questo documento descrive come utilizzare lo script Python `campus_analysis_dilemmi_speed_psychopy.py` per processare e combinare i dati provenienti da esperimenti realizzati con PsychoPy e analizzati con SPEED.
 
 ## 1. Scopo dello Script
 
 Lo scopo principale dello script è quello di automatizzare l'analisi dei dati grezzi di un esperimento sui dilemmi morali. Prende in input due file per ogni partecipante:
 
-1. L'output dell'eye-tracker processato da **SPEED** (il file `summary...csv`).
+1. *(Opzionale)* L'output dell'eye-tracker processato da **SPEED** (il file `summary...csv`).
 2. L'output comportamentale generato da **PsychoPy** (il file `.csv` con tutti i log della prova).
 
 Lo script combina le informazioni rilevanti da entrambi i file, calcola le metriche comportamentali chiave (correttezza e tempo di reazione) e produce un **singolo file CSV pulito e aggregato** per ogni partecipante, pronto per le analisi statistiche.
 
 ## 2. Prerequisiti
 
-Prima di utilizzare lo script, assicurati di avere un ambiente Python funzionante. Per garantire che le dipendenze del progetto non entrino in conflitto con altri progetti Python sul tuo computer, è fortemente consigliato utilizzare un **ambiente virtuale**.
+Per eseguire il progetto dai sorgenti:
 
-Di seguito trovi due opzioni principali per configurare l'ambiente.
+1. **Installa Anaconda**: [Link](https://www.anaconda.com/)
+2. *(Opzionale)* Installa CUDA Toolkit: Per l'accelerazione GPU con NVIDIA. [Link](https://developer.nvidia.com/cuda-downloads)
+3. **Crea un ambiente virtuale**:
 
-### Opzione A: Installazione con Python e `venv` (Standard)
+Apri il Prompt di Anaconda
 
-Questa è l'opzione più leggera se hai già Python installato sul tuo sistema.
+```bash
+conda create --name dilemmi
+conda activate dilemmi
+conda install pip
+conda install git
+git clone https://github.com/danielelozzi/dilemmi_campus_biomedico.git
+```
+4. **Installa le librerie richieste**:
 
-1.  **Installa Python**: Assicurati di avere Python 3 installato. Puoi scaricarlo dal sito ufficiale di Python.
+apri la cartella
 
-2.  **Crea un ambiente virtuale**: Apri il terminale, naviga nella cartella del progetto (`progetto_analisi/`) e crea un ambiente virtuale.
-    ```bash
-    python -m venv venv
-    ```
+```bash
+cd dilemmi_campus_biomedico
+```
 
-3.  **Attiva l'ambiente virtuale**:
-    *   Su **macOS/Linux**:
-        ```bash
-        source venv/bin/activate
-        ```
-    *   Su **Windows**:
-        ```bash
-        venv\Scripts\activate
-        ```
-    Noterai che il nome dell'ambiente (`venv`) appare all'inizio della riga del terminale.
+installa i requisiti
 
-4.  **Installa le dipendenze**: Con l'ambiente attivo, installa le librerie necessarie usando il file `requirements.txt` fornito.
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
+5. **(opzionale) Installa Pytorch CUDA**:
 
-### Opzione B: Installazione con Anaconda/Miniconda (Consigliato per la ricerca)
+[https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/)
 
-Anaconda è una distribuzione pensata per il calcolo scientifico. Semplifica la gestione di pacchetti e ambienti.
+```bash
+<command>
+```
 
-1.  **Installa Anaconda o Miniconda**: Scarica l'installer per il tuo sistema operativo dalla pagina di Anaconda (versione completa) o Miniconda (versione minimale, più leggera).
+---
 
-2.  **Crea un ambiente Conda**: Apri l'**Anaconda Prompt** (su Windows) o il terminale (macOS/Linux) e crea un nuovo ambiente. Puoi chiamarlo `dilemmi_env` o come preferisci.
-    ```bash
-    conda create --name dilemmi_env python=3.9
-    ```
-    Ti verrà chiesto di confermare, digita `y` e premi Invio.
-
-3.  **Attiva l'ambiente**:
-    ```bash
-    conda activate dilemmi_env
-    ```
-
-4.  **Installa le dipendenze**: Con l'ambiente attivo, puoi installare `pandas` tramite conda o pip.
-    ```bash
-    # Opzione 1: Usando conda (consigliato in un ambiente conda)
-    conda install pandas
-
-    # Opzione 2: Usando pip e il file requirements.txt
-    pip install -r requirements.txt
-    ```
+**Indipendentemente dall'opzione scelta**, devi avere a disposizione i file di output di SPEED e PsychoPy per ogni partecipante.
 
 ## 3. Struttura delle Cartelle (Fondamentale)
 
@@ -78,12 +60,12 @@ Lo script si aspetta una specifica organizzazione dei file per funzionare corret
 ```
 progetto_analisi/
 │
-├── analisi_dilemmi_morali.py  <-- LO SCRIPT DEVE ESSERE QUI
+├── campus_analysis_dilemmi_speed_psychopy.py  <-- LO SCRIPT DEVE ESSERE QUI
 │
 └── participants/                                <-- UNA CARTELLA CHIAMATA "participants"
     │
     ├── partecipante_01/                         <-- UNA SOTTOCARTELLA PER OGNI PARTECIPANTE
-    │   ├── summary_results_dy_p01.csv           (File di output di SPEED)
+    │   ├── summary_results_dy_p01.csv           *(Opzionale)* (File di output di SPEED)
     │   └── p01_psychopy_output.csv              (File di output di PsychoPy)
     │
     ├── partecipante_02/
@@ -99,17 +81,23 @@ progetto_analisi/
 
 ## 4. Come Usare lo Script
 
-1. **Organizza i file**: Assicurati che le cartelle e i file siano strutturati come descritto al punto 3.
-2. **Apri il Terminale**: Apri un'applicazione terminale (Terminale su macOS/Linux, Prompt dei comandi o PowerShell su Windows).
-3. **Naviga nella Cartella**: Usa il comando `cd` per spostarti all'interno della cartella principale del tuo progetto. Esempio:
+
+1.  **Organizza i file**: Assicurati che le cartelle e i file siano strutturati come descritto al punto 3.
+2.  **Apri il Terminale**: Apri un'applicazione terminale (es. Terminale su macOS/Linux, Anaconda Prompt su Windows).
+3.  **Attiva l'ambiente virtuale**: Digita il comando per attivare l'ambiente Conda preparato in precedenza:
+    ```bash
+    conda activate dilemmi
+    ```
+4.  **Naviga nella Cartella**: Usa il comando `cd` per spostarti nella cartella principale del progetto (quella che contiene lo script e la cartella `participants`).
+    *Suggerimento: su molti terminali, puoi scrivere `cd ` e poi trascinare la cartella direttamente nella finestra per incollare il suo percorso.* Esempio:
    ```bash
-   cd <drag and drop folder>
+    cd /percorso/della/tua/cartella/progetto_analisi
    ```
-4. **Esegui lo Script**: Lancia lo script usando il comando `python`:
-   ```bash
-   python analisi_dilemmi_morali.py
-   ```
-5. **Controlla l'Output**: Lo script stamperà a schermo lo stato di avanzamento. Al termine, troverai un nuovo file chiamato `[nome_partecipante]_processed_data.csv` all'interno di ogni sottocartella di `participants`.
+5.  **Esegui lo Script**: Lancia lo script con il comando `python`:
+    ```bash
+    python campus_analysis_dilemmi_speed_psychopy.py
+    ```
+6.  **Controlla l'Output**: Lo script stamperà a schermo lo stato di avanzamento. Al termine, troverai un nuovo file chiamato `[nome_partecipante]_processed_data.csv` all'interno di ogni sottocartella in `participants`.
 
 ## 5. Funzionamento Dettagliato dello Script
 
