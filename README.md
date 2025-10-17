@@ -51,7 +51,6 @@ pip install -r requirements.txt
 
 ---
 
-**Indipendentemente dall'opzione scelta**, devi avere a disposizione i file di output di SPEED e PsychoPy per ogni partecipante.
 
 ## 3. Struttura delle Cartelle (Fondamentale)
 
