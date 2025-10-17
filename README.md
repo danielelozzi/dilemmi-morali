@@ -64,7 +64,7 @@ dilemmi-morali/
 └── participants/                                <-- UNA CARTELLA CHIAMATA "participants"
     │
     ├── partecipante_01/                         <-- UNA SOTTOCARTELLA PER OGNI PARTECIPANTE
-    │   ├── summary_results_dy_p01.csv           *(Opzionale)* (File di output di SPEED)
+    │   ├── summary_results_dy_p01.csv           (File di output di SPEED - opzionale)
     │   └── p01_psychopy_output.csv              (File di output di PsychoPy)
     │
     ├── partecipante_02/
