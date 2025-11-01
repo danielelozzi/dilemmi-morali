@@ -108,12 +108,12 @@ def process_participant_data(participant_folder):
         final_df = pd.DataFrame(processed_rows)
         
         # Assicura che le colonne richieste siano presenti nell'ordine corretto
-        required_cols = ['participant', 'event', 'key_pressed', 'response_side', 'is_correct', 'reaction_time_custom_s']
+        required_cols = ['participant', 'event', 'type', 'key_pressed', 'response_side', 'is_correct', 'reaction_time_custom_s']
         for col in required_cols:
             if col not in final_df.columns:
                 final_df[col] = pd.NA
         
-        final_df = final_df[required_cols]
+        final_df = final_df[[col for col in required_cols if col in final_df.columns]]
 
     else: # Se il file summary è presente, esegui la logica originale
         print(f"  - File Summary trovato: {os.path.basename(summary_file)}")
@@ -194,10 +194,26 @@ def process_participant_data(participant_folder):
             
         final_df = pd.DataFrame(processed_rows)
         
-        new_cols_order = ['participant', 'event', 'key_pressed', 'response_side', 'is_correct', 'reaction_time_custom_s']
+        new_cols_order = ['participant', 'event', 'type', 'key_pressed', 'response_side', 'is_correct', 'reaction_time_custom_s']
         existing_cols = [col for col in new_cols_order if col in final_df.columns]
         remaining_cols = [col for col in final_df.columns if col not in existing_cols]
         final_df = final_df[existing_cols + remaining_cols]
+
+    # Aggiungi la colonna 'type' basata sul contenuto della colonna 'event'
+    conditions = [
+        final_df['event'].str.contains('_pers_'),
+        final_df['event'].str.contains('_imper_'),
+        final_df['event'].str.contains('_controllo_')
+    ]
+    choices = ['personale', 'impersonale', 'controllo']
+    final_df['type'] = pd.NA
+    final_df['type'] = final_df['type'].where(~(conditions[0] | conditions[1] | conditions[2]), pd.Series(pd.NA).reindex_like(final_df['type']))
+    final_df.loc[conditions[0], 'type'] = choices[0]
+    final_df.loc[conditions[1], 'type'] = choices[1]
+    final_df.loc[conditions[2], 'type'] = choices[2]
+
+    # Rimuovi le righe che contengono '/Main/' nella colonna 'event'
+    final_df = final_df[~final_df['event'].str.contains('/Main/', na=False)]
 
     participant_id_folder = os.path.basename(participant_folder)
     output_filename_csv = os.path.join(participant_folder, f"{participant_id_folder}_processed_data.csv")
