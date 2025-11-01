@@ -103,39 +103,43 @@ dilemmi-morali/
 Lo script esegue i seguenti passaggi per ogni partecipante:
 
 1. **Identificazione dei File**: Cerca i due file `.csv` necessari (summary e PsychoPy).
-2. **Selezione Eventi `MAIN`**: Legge il file `summary...` e seleziona solo le righe che corrispondono alla presentazione del dilemma (eventi contenenti `_main_`). Tutti gli altri eventi vengono ignorati.
-3. **Selezione Eventi `CHOICE`**: Per ogni evento `MAIN`, lo script analizza le righe successive nel file `summary...` per trovare l'evento di scelta corretto. Lo fa cercando il primo `red_dot_start` che segue il `MAIN` e selezionando la riga immediatamente successiva, che corrisponde all'inizio della schermata di scelta. Questo garantisce che vengano presi i dati di eye-tracking corretti per la fase di decisione, ignorando eventi spuri.
-4. **Collegamento con i Dati PsychoPy**: Lo script trova la riga corrispondente nel file di PsychoPy per estrarre i dati comportamentali.
-5. **Calcolo del Tempo di Reazione**: Calcola il tempo di reazione (in secondi) usando la formula precisa basata sui timestamp di PsychoPy:
+2. **Selezione Eventi `CHOICE`**: Se presente il file `summary...` (output di SPEED), lo script identifica gli eventi relativi alla presentazione del dilemma (`_main_`) e li usa per localizzare i corrispondenti eventi di scelta (`_choice_`). Questo garantisce che vengano associati i dati corretti.
+3. **Collegamento con i Dati PsychoPy**: Lo script trova la riga corrispondente nel file di PsychoPy per ogni dilemma per estrarre i dati comportamentali.
+4. **Calcolo del Tempo di Reazione**: Calcola il tempo di reazione (in secondi) usando la formula precisa basata sui timestamp di PsychoPy:
    `RT = Dilemma.stopped - ((left_choice_image.started + right_choice_image.started) / 2)`
-6. **Valutazione della Correttezza**: Aggiunge una colonna booleana `is_correct` (`True`/`False`). Il valore è `True` solo se la risposta data ('z' per sinistra, 'm' per destra) corrisponde alla risposta corretta indicata nella colonna `correct` del file PsychoPy.
-7. **Creazione del File di Output**: Combina i dati dell'eye-tracker (dalle righe `MAIN` e `CHOICE`) con le nuove colonne calcolate (`key_pressed`, `response_side`, `is_correct`, `reaction_time_custom_s`) e salva tutto in un nuovo file CSV.
+5. **Valutazione della Correttezza**: Aggiunge una colonna booleana `is_correct` (`True`/`False`). Il valore è `True` solo se la risposta data ('z' per sinistra, 'm' per destra) corrisponde alla risposta corretta indicata nella colonna `correct` del file PsychoPy.
+6. **Aggiunta del Tipo di Dilemma**: Crea una colonna `type` e la popola con "personale", "impersonale" o "controllo" in base al nome del file dell'evento.
+7. **Creazione del File di Output**: Filtra i dati per mantenere solo le righe relative agli eventi di scelta (`CHOICE`), scartando quelle di presentazione (`MAIN`). Infine, combina tutti i dati in un nuovo file CSV.
 
 ## 6. Descrizione del File di Output
 
 Per ogni partecipante, verrà creato un file `[nome_partecipante]_processed_data.csv`. Questo file avrà la seguente struttura:
 
-* Una riga per l'evento `MAIN` con tutti i dati originali dell'eye-tracker.
-* Subito dopo, una riga per l'evento `CHOICE` che contiene:
-  * Tutti i dati originali dell'eye-tracker per la fase di scelta.
-  * Le nuove colonne aggiunte dallo script:
-    * `key_pressed`: Il tasto premuto ('z' o 'm').
-    * `response_side`: Il lato corrispondente ('left' o 'right').
-    * `is_correct`: `True` se la risposta è corretta, altrimenti `False`.
-    * `reaction_time_custom_s`: Il tempo di reazione calcolato.
+**Una riga per ogni dilemma**, corrispondente al momento della scelta, con le seguenti colonne:
+
+*   `participant`: L'ID del partecipante.
+*   `event`: Il percorso del file dell'immagine di scelta (es. `images/Buttons/.../dilemma_pers_choice_9.jpg_start`).
+*   `type`: Il tipo di dilemma ("personale", "impersonale", "controllo").
+*   `key_pressed`: Il tasto premuto ('z' o 'm').
+*   `response_side`: Il lato corrispondente ('left' o 'right').
+*   `is_correct`: `True` se la risposta è corretta, altrimenti `False`.
+*   `reaction_time_custom_s`: Il tempo di reazione calcolato in secondi.
+*   ... (seguono tutte le altre colonne con le feature dell'eye-tracker, se il file `summary...` era presente).
 
 Questo formato "pulito" è ideale per essere importato in software statistici come R, SPSS, o per ulteriori analisi con Python stesso.
 
 **Nota**: Nel caso in cui non fosse presente l'output di SPEED, le uniche colonne che saranno generate saranno le seguenti:
 
-* `key_pressed`: Il tasto premuto ('z' o 'm').
-* `response_side`: Il lato corrispondente ('left' o 'right').
-* `is_correct`: `True` se la risposta è corretta, altrimenti `False`.
-* `reaction_time_custom_s`: Il tempo di reazione calcolato.
+*   `participant`
+*   `event`
+*   `type`
+*   `key_pressed`
+*   `response_side`
+*   `is_correct`
+*   `reaction_time_custom_s`
 
 senza quelle relative alle features estratte dall'eyetracker.
 
 ## ✍️ Authors & Citation
 
 Questo strumento è stato sviluppato dal Dott. Daniele Lozzi e dal Laboratorio di Scienze Cognitive e Comportamentali [LabSCoC](https://labscoc.wordpress.com/chi-siamo/) dell'Università dell'Aquila
-
